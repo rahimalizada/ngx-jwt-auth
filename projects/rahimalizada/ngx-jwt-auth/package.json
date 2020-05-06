@@ -22,9 +22,7 @@
   "peerDependencies": {
     "@angular/common": "^9.1.4",
     "@angular/core": "^9.1.4",
-    "tslib": "^1.10.0"
-  },
-  "dependencies": {
+    "tslib": "^1.10.0",
     "@auth0/angular-jwt": "^4.0.0",
     "shiro-trie": "^0.4.9"
   }
