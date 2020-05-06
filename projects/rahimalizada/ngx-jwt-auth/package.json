@@ -1,6 +1,24 @@
 {
   "name": "@rahimalizada/ngx-jwt-auth",
   "version": "0.0.1",
+  "description": "Generic JWT authentication services",
+  "keywords": [
+    "angular",
+    "jwt",
+    "authntication"
+  ],
+  "author": {
+    "name": "Rahim Alizada"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rahimalizada/ngx-jwt-auth",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahimalizada/ngx-jwt-auth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rahimalizada/ngx-jwt-auth/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^9.1.4",
     "@angular/core": "^9.1.4",
