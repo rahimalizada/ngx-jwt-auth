@@ -14,7 +14,13 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@rahimalizada/ngx-jwt-auth": [
+        "dist/rahimalizada/ngx-jwt-auth/rahimalizada-ngx-jwt-auth",
+        "dist/rahimalizada/ngx-jwt-auth"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
