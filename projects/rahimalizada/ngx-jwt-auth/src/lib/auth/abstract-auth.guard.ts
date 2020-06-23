@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AbstractAuthService } from './abstract-auth.service';
@@ -7,7 +7,7 @@ export abstract class AbstractAuthGuard<T extends { token: string; refreshToken:
   implements CanActivate, CanActivateChild {
   constructor(protected authService: AbstractAuthService<T>, protected router: Router, private tokenRenewalfailRedirect: string) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | boolean | UrlTree {
     if (!this.authService.isLoggedIn()) {
       return this.authService.renewToken().pipe(
         map(
@@ -28,7 +28,7 @@ export abstract class AbstractAuthGuard<T extends { token: string; refreshToken:
     return true;
   }
 
-  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> {
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | boolean | UrlTree {
     return this.canActivate(childRoute, state);
   }
 }
