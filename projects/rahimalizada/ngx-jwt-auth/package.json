@@ -1,6 +1,6 @@
 {
   "name": "@rahimalizada/ngx-jwt-auth",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Generic JWT authentication services",
   "keywords": [
     "angular",
