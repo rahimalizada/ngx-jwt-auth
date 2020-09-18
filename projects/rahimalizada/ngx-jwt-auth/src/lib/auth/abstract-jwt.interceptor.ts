@@ -79,7 +79,7 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
   addHeaders(req: HttpRequest<any>): HttpRequest<any> {
     return req.clone({
       setHeaders: {
-        'Client-Id': this.clientId,
+        'X-Client-Id': this.clientId,
         Timestamp: new Date().toISOString(),
       },
     });

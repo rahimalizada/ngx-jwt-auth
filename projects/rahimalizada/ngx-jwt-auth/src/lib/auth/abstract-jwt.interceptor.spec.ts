@@ -63,7 +63,7 @@ describe('AbstractJwtInterceptor without existing token', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
 
     req.flush('ok');
   });
@@ -85,14 +85,14 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.method).toEqual('POST');
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush(TestAuthService.validAuthData);
 
     const req2 = httpTestingController.expectOne('http://localhost/path');
     expect(req2.request.method).toEqual('GET');
     expect(req2.request.headers.has('Authorization')).toEqual(true);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req2.flush('ok');
   });
 
@@ -106,7 +106,7 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.method).toEqual('POST');
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush('Error message', { status: 404, statusText: 'Not Found' });
 
     tick();
@@ -123,7 +123,7 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.method).toEqual('POST');
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush('Error message', { status: 401, statusText: 'Unauthorized' });
 
     tick();
@@ -140,14 +140,14 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.method).toEqual('POST');
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush(TestAuthService.validAuthData);
 
     const req2 = httpTestingController.expectOne('http://localhost/path');
     expect(req2.request.method).toEqual('GET');
     expect(req2.request.headers.has('Authorization')).toEqual(true);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req2.flush('Error message', { status: 404, statusText: 'Not Found' });
 
     tick();
@@ -164,14 +164,14 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.method).toEqual('POST');
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush(TestAuthService.validAuthData);
 
     const req2 = httpTestingController.expectOne('http://localhost/path');
     expect(req2.request.method).toEqual('GET');
     expect(req2.request.headers.has('Authorization')).toEqual(true);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req2.flush('Error message', { status: 401, statusText: 'Unauthorized' });
 
     tick();
@@ -194,7 +194,7 @@ describe('AbstractJwtInterceptor with existing valid token', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.headers.has('Authorization')).toEqual(true);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush('ok');
   });
 
@@ -208,7 +208,7 @@ describe('AbstractJwtInterceptor with existing valid token', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.headers.has('Authorization')).toEqual(true);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush('Error message', { status: 404, statusText: 'Not Found' });
 
     httpTestingController.expectNone('/api/auth/renew-token');
@@ -224,21 +224,21 @@ describe('AbstractJwtInterceptor with existing valid token', () => {
     expect(req.request.method).toEqual('GET');
     expect(req.request.headers.has('Authorization')).toEqual(true);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req.flush('Error message', { status: 401, statusText: 'Unauthorized' });
 
     const req2 = httpTestingController.expectOne('/api/auth/renew-token');
     expect(req2.request.method).toEqual('POST');
     expect(req2.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req2.flush(TestAuthService.validAuthData);
 
     const req3 = httpTestingController.expectOne('http://localhost/path');
     expect(req3.request.method).toEqual('GET');
     expect(req3.request.headers.has('Authorization')).toEqual(true);
     expect(req.request.headers.has('Timestamp')).toEqual(true);
-    expect(req.request.headers.get('Client-Id')).toEqual('Test client ver. 1.2.3');
+    expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
     req3.flush('ok');
   });
 });
