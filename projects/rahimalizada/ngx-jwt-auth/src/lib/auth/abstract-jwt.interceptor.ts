@@ -82,6 +82,7 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
         'X-Client-Id': this.clientId,
         'X-Timestamp': new Date().toISOString(),
       },
+      withCredentials: true,
     });
   }
 }
