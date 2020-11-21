@@ -12,10 +12,10 @@ export class TestAuthService<T extends { token: string; refreshToken: string; ro
   public static readonly apiPath = '/api/auth';
 
   public static readonly validToken =
-    // tslint:disable-next-line: max-line-length
+    // eslint-disable-next-line max-len
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE5MTYyMzkwMjJ9.dMD3MLuHTiO-Qy9PvOoMchNM4CzFIgI7jKVrRtlqlM0';
   public static readonly expiredToken =
-    // tslint:disable-next-line: max-line-length
+    // eslint-disable-next-line max-len
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.4Adcj3UFYzPUVaVF43FmMab6RlaQD8A9V8wFzzht-KQ';
 
   public static readonly validAuthData = { token: TestAuthService.validToken, refreshToken: TestAuthService.validToken, roles: ['*'] };
