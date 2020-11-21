@@ -10,7 +10,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/rahimalizada/ngx-jwt-auth/tsconfig.lib.json",
             "project": "projects/rahimalizada/ngx-jwt-auth/ng-package.json"
@@ -42,6 +42,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "@rahimalizada/ngx-jwt-auth"
 }
