@@ -22,19 +22,6 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     this.loadStorage();
   }
 
-  private isValid(authData: T): boolean {
-    if (!authData || !authData.token) {
-      return false;
-    }
-
-    const isTokenExpired = this.isTokenExpired(authData.token);
-    const isRefreshTokenExpired = this.isTokenExpired(authData.refreshToken);
-    if (isTokenExpired && isRefreshTokenExpired) {
-      return false;
-    }
-    return true;
-  }
-
   isTokenExpired(token: string) {
     try {
       const expired = this.jwtHelper.isTokenExpired(token);
@@ -48,19 +35,6 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     }
     return false;
   }
-
-  private deleteStorage() {
-    localStorage.removeItem(this.storageItemId);
-  }
-
-  private loadStorage() {
-    const authData = JSON.parse(localStorage.getItem(this.storageItemId));
-    if (authData) {
-      this.loggedInSubject.next(this.isValid(authData));
-      this.authDataSubject.next(authData);
-    }
-  }
-
   saveStorage(authData: T) {
     localStorage.setItem(this.storageItemId, JSON.stringify(authData));
     this.loggedInSubject.next(this.isValid(authData));
@@ -131,5 +105,30 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
   // Comma separated
   hasPermissions(requiredPermissions: string) {
     return this.shiroTrie.check(requiredPermissions);
+  }
+
+  private isValid(authData: T): boolean {
+    if (!authData || !authData.token) {
+      return false;
+    }
+
+    const isTokenExpired = this.isTokenExpired(authData.token);
+    const isRefreshTokenExpired = this.isTokenExpired(authData.refreshToken);
+    if (isTokenExpired && isRefreshTokenExpired) {
+      return false;
+    }
+    return true;
+  }
+
+  private deleteStorage() {
+    localStorage.removeItem(this.storageItemId);
+  }
+
+  private loadStorage() {
+    const authData = JSON.parse(localStorage.getItem(this.storageItemId));
+    if (authData) {
+      this.loggedInSubject.next(this.isValid(authData));
+      this.authDataSubject.next(authData);
+    }
   }
 }
