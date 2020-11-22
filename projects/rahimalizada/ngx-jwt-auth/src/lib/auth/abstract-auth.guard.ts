@@ -12,7 +12,7 @@ export abstract class AbstractAuthGuard<T extends { token: string; refreshToken:
       return this.authService.renewToken().pipe(
         map(
           (res) => this.authService.isLoggedIn(),
-          (err) => {
+          () => {
             this.router.navigate([this.tokenRenewalfailRedirect]);
             return false;
           },

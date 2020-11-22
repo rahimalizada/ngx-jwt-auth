@@ -68,21 +68,24 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
     );
   }
 
-  private addToken(req: HttpRequest<any>): HttpRequest<any> {
-    return req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${this.authService.authDataSubject.value.token}`,
-      },
-    });
-  }
-
   addHeaders(req: HttpRequest<any>): HttpRequest<any> {
     return req.clone({
       setHeaders: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'X-Client-Id': this.clientId,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'X-Timestamp': new Date().toISOString(),
       },
       withCredentials: true,
+    });
+  }
+
+  private addToken(req: HttpRequest<any>): HttpRequest<any> {
+    return req.clone({
+      setHeaders: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        Authorization: `Bearer ${this.authService.authDataSubject.value?.token}`,
+      },
     });
   }
 }
