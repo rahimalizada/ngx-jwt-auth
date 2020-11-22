@@ -6,7 +6,7 @@ import * as shiro from 'shiro-trie';
 
 export abstract class AbstractAuthService<T extends { token: string; refreshToken: string; roles: string[] }> {
   loggedInSubject = new BehaviorSubject<boolean>(false);
-  authDataSubject = new BehaviorSubject<T>(null);
+  authDataSubject = new BehaviorSubject<T | null>(null);
   shiroTrie = shiro.newTrie();
 
   protected jwtHelper = new JwtHelperService();
@@ -49,7 +49,7 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
   renewToken() {
     if (!this.authDataSubject.value || !this.authDataSubject.value.refreshToken) {
       this.logout();
-      return new Observable((observer: Observer<T>) => {
+      return new Observable((observer: Observer<T | null>) => {
         observer.next(null);
         observer.complete();
       });
@@ -107,7 +107,7 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     return this.shiroTrie.check(requiredPermissions);
   }
 
-  private isValid(authData: T): boolean {
+  private isValid(authData: T | null): boolean {
     if (!authData || !authData.token) {
       return false;
     }
@@ -125,7 +125,11 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
   }
 
   private loadStorage() {
-    const authData = JSON.parse(localStorage.getItem(this.storageItemId));
+    const storageItem = localStorage.getItem(this.storageItemId);
+    if (storageItem === null) {
+      return;
+    }
+    const authData = JSON.parse(storageItem);
     if (authData) {
       this.loggedInSubject.next(this.isValid(authData));
       this.authDataSubject.next(authData);
