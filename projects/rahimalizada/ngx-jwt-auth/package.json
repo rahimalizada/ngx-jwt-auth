@@ -20,10 +20,10 @@
     "url": "https://github.com/rahimalizada/ngx-jwt-auth/issues"
   },
   "peerDependencies": {
-    "@angular/common": "^11.0.0",
-    "@angular/core": "^11.0.0",
-    "@auth0/angular-jwt": "^5.0.0",
-    "shiro-trie": "^0.4.9"
+    "@angular/common": "^11.1.0",
+    "@angular/core": "^11.1.0",
+    "@auth0/angular-jwt": "^5.0.2",
+    "shiro-trie": "^0.4.10"
   },
   "dependencies": {
     "tslib": "^2.0.0"
