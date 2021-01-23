@@ -23,6 +23,7 @@
     "@angular/common": "^11.1.0",
     "@angular/core": "^11.1.0",
     "@auth0/angular-jwt": "^5.0.2",
+    "@rahimalizada/ngx-common": "^0.0.3",
     "shiro-trie": "^0.4.10"
   },
   "dependencies": {

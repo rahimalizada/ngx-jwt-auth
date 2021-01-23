@@ -38,6 +38,7 @@
     "@angular/platform-browser-dynamic": "^11.1.0",
     "@angular/router": "^11.1.0",
     "@auth0/angular-jwt": "^5.0.2",
+    "@rahimalizada/ngx-common": "0.0.3",
     "rxjs": "~6.6.3",
     "shiro-trie": "^0.4.10",
     "tslib": "^2.0.0",
