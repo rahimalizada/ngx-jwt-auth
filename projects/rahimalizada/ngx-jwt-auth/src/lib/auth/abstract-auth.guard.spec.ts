@@ -13,7 +13,7 @@ class TestUserGuard<T extends { token: string; refreshToken: string; roles: stri
 
 let router: Router;
 let routeSnapshot: ActivatedRouteSnapshot;
-const routeState: RouterStateSnapshot = null;
+let routeState: RouterStateSnapshot;
 let service: jasmine.SpyObj<TestAuthService<any>>;
 let guard: TestUserGuard<any>;
 let trueObservable: Observable<boolean>;

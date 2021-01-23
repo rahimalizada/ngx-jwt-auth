@@ -18,13 +18,13 @@ export class TestAuthService<T extends { token: string; refreshToken: string; ro
     // eslint-disable-next-line max-len
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.4Adcj3UFYzPUVaVF43FmMab6RlaQD8A9V8wFzzht-KQ';
 
-  public static readonly validAuthData = { token: TestAuthService.validToken, refreshToken: TestAuthService.validToken, roles: ['*'] };
-  public static readonly expiredAuthData = {
+  public static readonly validAuthResult = { token: TestAuthService.validToken, refreshToken: TestAuthService.validToken, roles: ['*'] };
+  public static readonly expiredAuthResult = {
     token: TestAuthService.expiredToken,
     refreshToken: TestAuthService.expiredToken,
     roles: ['read', 'write'],
   };
-  public static readonly invalidAuthData = { token: 'invalid', refreshToken: null, roles: ['-'] };
+  public static readonly invalidAuthResult = { token: 'invalid', refreshToken: null, roles: ['-'] };
 
   constructor(httpClient: HttpClient) {
     super(TestAuthService.storageItemId, httpClient, TestAuthService.apiPath);
@@ -61,7 +61,7 @@ describe('AbstractAuthService', () => {
 
     const req = httpTestingController.expectOne('/api/auth/reset-password/request');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
   });
 
   it('should submit valid reset password confirmation', () => {
@@ -69,13 +69,13 @@ describe('AbstractAuthService', () => {
 
     const req = httpTestingController.expectOne('/api/auth/reset-password/confirmation');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
   });
 });
 
 describe('AbstractAuthService with invalid state in local storage', () => {
   beforeEach(() => {
-    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.invalidAuthData));
+    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.invalidAuthResult));
   });
   sharedSetup();
 
@@ -97,7 +97,7 @@ describe('AbstractAuthService with invalid state in local storage', () => {
 
 describe('AbstractAuthService with expired state in local storage', () => {
   beforeEach(() => {
-    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.expiredAuthData));
+    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.expiredAuthResult));
   });
   sharedSetup();
 
@@ -119,7 +119,7 @@ describe('AbstractAuthService with expired state in local storage', () => {
 
 describe('AbstractAuthService with valid state in local storage', () => {
   beforeEach(() => {
-    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.validAuthData));
+    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.validAuthResult));
   });
   sharedSetup();
 
@@ -156,7 +156,7 @@ describe('AbstractAuthService login', () => {
 
     const req = httpTestingController.expectOne('/api/auth/login');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.expiredAuthData);
+    req.flush(TestAuthService.expiredAuthResult);
   });
 
   it('should save invalid state to local storage', () => {
@@ -167,7 +167,7 @@ describe('AbstractAuthService login', () => {
 
     const req = httpTestingController.expectOne('/api/auth/login');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.invalidAuthData);
+    req.flush(TestAuthService.invalidAuthResult);
   });
 
   it('should save valid state to local storage', () => {
@@ -178,10 +178,10 @@ describe('AbstractAuthService login', () => {
 
     const req = httpTestingController.expectOne('/api/auth/login');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
   });
 
-  it('should logot on invalid result', () => {
+  it('should logout on invalid result', () => {
     service.login({}).subscribe(
       (res) => {},
       (err) => {
@@ -208,7 +208,7 @@ describe('AbstractAuthService registration', () => {
 
     const req = httpTestingController.expectOne('/api/auth/register');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.expiredAuthData);
+    req.flush(TestAuthService.expiredAuthResult);
   });
 
   it('should save invalid state to local storage', () => {
@@ -219,7 +219,7 @@ describe('AbstractAuthService registration', () => {
 
     const req = httpTestingController.expectOne('/api/auth/register');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.invalidAuthData);
+    req.flush(TestAuthService.invalidAuthResult);
   });
 
   it('should save valid state to local storage', () => {
@@ -230,7 +230,7 @@ describe('AbstractAuthService registration', () => {
 
     const req = httpTestingController.expectOne('/api/auth/register');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
   });
 
   it('should logot on invalid result', () => {
@@ -262,7 +262,7 @@ describe('AbstractAuthService token renewal without state', () => {
 
 describe('AbstractAuthService token renewal with invalid state', () => {
   beforeEach(() => {
-    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.invalidAuthData));
+    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.invalidAuthResult));
   });
   sharedSetup();
 
@@ -276,7 +276,7 @@ describe('AbstractAuthService token renewal with invalid state', () => {
 
 describe('AbstractAuthService token renewal with valid state', () => {
   beforeEach(() => {
-    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.validAuthData));
+    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.validAuthResult));
   });
   sharedSetup();
 
@@ -288,7 +288,7 @@ describe('AbstractAuthService token renewal with valid state', () => {
 
     const req = httpTestingController.expectOne('/api/auth/renew-token');
     expect(req.request.method).toEqual('POST');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
   });
 
   it('should logout on http error', () => {

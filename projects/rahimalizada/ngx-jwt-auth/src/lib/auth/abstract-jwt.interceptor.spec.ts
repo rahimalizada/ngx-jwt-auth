@@ -71,7 +71,7 @@ describe('AbstractJwtInterceptor without existing token', () => {
 
 describe('AbstractJwtInterceptor with existing expired token', () => {
   beforeEach(() => {
-    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.expiredAuthData));
+    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.expiredAuthResult));
   });
   sharedSetup();
 
@@ -86,7 +86,7 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('X-Timestamp')).toEqual(true);
     expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
 
     const req2 = httpTestingController.expectOne('http://localhost/path');
     expect(req2.request.method).toEqual('GET');
@@ -141,7 +141,7 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('X-Timestamp')).toEqual(true);
     expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
 
     const req2 = httpTestingController.expectOne('http://localhost/path');
     expect(req2.request.method).toEqual('GET');
@@ -165,7 +165,7 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
     expect(req.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('X-Timestamp')).toEqual(true);
     expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
-    req.flush(TestAuthService.validAuthData);
+    req.flush(TestAuthService.validAuthResult);
 
     const req2 = httpTestingController.expectOne('http://localhost/path');
     expect(req2.request.method).toEqual('GET');
@@ -181,7 +181,7 @@ describe('AbstractJwtInterceptor with existing expired token', () => {
 
 describe('AbstractJwtInterceptor with existing valid token', () => {
   beforeEach(() => {
-    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.validAuthData));
+    localStorage.setItem(TestAuthService.storageItemId, JSON.stringify(TestAuthService.validAuthResult));
   });
   sharedSetup();
 
@@ -232,7 +232,7 @@ describe('AbstractJwtInterceptor with existing valid token', () => {
     expect(req2.request.headers.has('Authorization')).toEqual(false);
     expect(req.request.headers.has('X-Timestamp')).toEqual(true);
     expect(req.request.headers.get('X-Client-Id')).toEqual('Test client ver. 1.2.3');
-    req2.flush(TestAuthService.validAuthData);
+    req2.flush(TestAuthService.validAuthResult);
 
     const req3 = httpTestingController.expectOne('http://localhost/path');
     expect(req3.request.method).toEqual('GET');

@@ -6,16 +6,16 @@ import * as shiro from 'shiro-trie';
 
 export abstract class AbstractAuthService<T extends { token: string; refreshToken: string; roles: string[] }> {
   loggedInSubject = new BehaviorSubject<boolean>(false);
-  authDataSubject = new BehaviorSubject<T | null>(null);
+  authResultSubject = new BehaviorSubject<T | null>(null);
   shiroTrie = shiro.newTrie();
 
   protected jwtHelper = new JwtHelperService();
 
   constructor(private storageItemId: string, private http: HttpClient, public apiPath: string) {
-    this.authDataSubject.subscribe((authData) => {
-      if (authData) {
+    this.authResultSubject.subscribe((authResult) => {
+      if (authResult) {
         this.shiroTrie.reset();
-        this.shiroTrie.add(...authData.roles);
+        this.shiroTrie.add(...authResult.roles);
       }
     });
 
@@ -35,19 +35,19 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     }
     return false;
   }
-  saveStorage(authData: T) {
-    localStorage.setItem(this.storageItemId, JSON.stringify(authData));
-    this.loggedInSubject.next(this.isValid(authData));
-    this.authDataSubject.next(authData);
+  saveStorage(authResult: T) {
+    localStorage.setItem(this.storageItemId, JSON.stringify(authResult));
+    this.loggedInSubject.next(this.isValid(authResult));
+    this.authResultSubject.next(authResult);
   }
 
   isLoggedIn() {
-    this.loggedInSubject.next(this.isValid(this.authDataSubject.value));
+    this.loggedInSubject.next(this.isValid(this.authResultSubject.value));
     return this.loggedInSubject.value;
   }
 
   renewToken() {
-    if (!this.authDataSubject.value || !this.authDataSubject.value.refreshToken) {
+    if (!this.authResultSubject.value || !this.authResultSubject.value.refreshToken) {
       this.logout();
       return new Observable((observer: Observer<T | null>) => {
         observer.next(null);
@@ -55,12 +55,12 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
       });
     }
     return this.http
-      .post<T>(this.apiPath + '/renew-token', { refreshToken: this.authDataSubject.value.refreshToken })
+      .post<T>(this.apiPath + '/renew-token', { refreshToken: this.authResultSubject.value.refreshToken })
       .pipe(
         tap(
-          (authData) => {
-            console.log('Token renewed, expiration date: ' + this.jwtHelper.getTokenExpirationDate(authData.token));
-            this.saveStorage(authData);
+          (authResult) => {
+            console.log('Token renewed, expiration date: ' + this.jwtHelper.getTokenExpirationDate(authResult.token));
+            this.saveStorage(authResult);
           },
           (error) => {
             console.log('Token renewal failed');
@@ -73,7 +73,7 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
   logout() {
     this.deleteStorage();
     this.loggedInSubject.next(false);
-    this.authDataSubject.next(null);
+    this.authResultSubject.next(null);
   }
 
   register(data: any) {
@@ -107,13 +107,13 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     return this.shiroTrie.check(requiredPermissions);
   }
 
-  private isValid(authData: T | null): boolean {
-    if (!authData || !authData.token) {
+  private isValid(authResult: T | null): boolean {
+    if (!authResult || !authResult.token) {
       return false;
     }
 
-    const isTokenExpired = this.isTokenExpired(authData.token);
-    const isRefreshTokenExpired = this.isTokenExpired(authData.refreshToken);
+    const isTokenExpired = this.isTokenExpired(authResult.token);
+    const isRefreshTokenExpired = this.isTokenExpired(authResult.refreshToken);
     if (isTokenExpired && isRefreshTokenExpired) {
       return false;
     }
@@ -129,10 +129,10 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     if (storageItem === null) {
       return;
     }
-    const authData = JSON.parse(storageItem);
-    if (authData) {
-      this.loggedInSubject.next(this.isValid(authData));
-      this.authDataSubject.next(authData);
+    const authResult = JSON.parse(storageItem);
+    if (authResult) {
+      this.loggedInSubject.next(this.isValid(authResult));
+      this.authResultSubject.next(authResult);
     }
   }
 }

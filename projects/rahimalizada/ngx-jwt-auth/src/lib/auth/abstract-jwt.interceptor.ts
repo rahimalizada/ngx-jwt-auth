@@ -10,11 +10,11 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
     private clientId: string,
     private authService: AbstractAuthService<T>,
     private router: Router,
-    private tokenRenewalfailRedirect: string,
+    private tokenRenewalFailRedirect: string,
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.authService.authDataSubject.value ? this.authService.authDataSubject.value.token : null;
+    const token = this.authService.authResultSubject.value ? this.authService.authResultSubject.value.token : null;
     const tokenExpired = token ? this.authService.isTokenExpired(token) : true;
     const isAuthPath = req.url.search(this.authService.apiPath) === 0; // starts with /auth/...
 
@@ -45,7 +45,7 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
 
   tryWithRenewedToken(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authService.renewToken().pipe(
-      switchMap((authData) => {
+      switchMap((authResult) => {
         console.log('Retrying request with renewed token');
         return next.handle(this.addToken(req)).pipe(
           catchError((error) => {
@@ -61,7 +61,7 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
           console.log('Token renewal failed with 401 status code, logging out');
           // If there is an exception calling 'renewToken', No need to logout though, renewToken pipe did that already
           // this.authService.logout();
-          this.router.navigate([this.tokenRenewalfailRedirect]);
+          this.router.navigate([this.tokenRenewalFailRedirect]);
         }
         return throwError(error);
       }),
@@ -71,9 +71,7 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
   addHeaders(req: HttpRequest<any>): HttpRequest<any> {
     return req.clone({
       setHeaders: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         'X-Client-Id': this.clientId,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         'X-Timestamp': new Date().toISOString(),
       },
       withCredentials: true,
@@ -83,8 +81,7 @@ export abstract class AbstractJwtInterceptor<T extends { token: string; refreshT
   private addToken(req: HttpRequest<any>): HttpRequest<any> {
     return req.clone({
       setHeaders: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: `Bearer ${this.authService.authDataSubject.value?.token}`,
+        Authorization: `Bearer ${this.authService.authResultSubject.value?.token}`,
       },
     });
   }
